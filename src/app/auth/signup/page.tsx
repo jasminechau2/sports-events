@@ -1,11 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { signUp, signInWithGoogle } from "@/lib/actions/auth";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -15,7 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
 import {
   AuthLayout,
   AuthCard,
@@ -23,79 +17,17 @@ import {
   GoogleButton,
   SubmitButton,
 } from "@/components/auth";
-
-const signUpSchema = z
-  .object({
-    email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type SignUpFormValues = z.infer<typeof signUpSchema>;
+import { useSignUp } from "@/features/auth/hooks";
 
 export default function SignUpPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const { toast } = useToast();
-
-  const form = useForm<SignUpFormValues>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
-  const isDisabled = isLoading || isGoogleLoading;
-
-  const onSubmit = async (data: SignUpFormValues) => {
-    setIsLoading(true);
-
-    const result = await signUp({
-      email: data.email,
-      password: data.password,
-    });
-
-    if (!result.success) {
-      toast({
-        variant: "destructive",
-        title: "Sign up failed",
-        description: result.error,
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    toast({
-      title: "Check your email",
-      description: "We sent you a confirmation link to verify your email.",
-    });
-
-    setIsLoading(false);
-  };
-
-  const handleGoogleSignUp = async () => {
-    setIsGoogleLoading(true);
-
-    const result = await signInWithGoogle();
-
-    if (!result.success) {
-      toast({
-        variant: "destructive",
-        title: "Sign up failed",
-        description: result.error,
-      });
-      setIsGoogleLoading(false);
-      return;
-    }
-
-    window.location.href = result.data;
-  };
+  const {
+    form,
+    isLoading,
+    isGoogleLoading,
+    isDisabled,
+    onSubmit,
+    onGoogleSignUp,
+  } = useSignUp();
 
   return (
     <AuthLayout>
@@ -178,7 +110,7 @@ export default function SignUpPage() {
         <Divider />
 
         <GoogleButton
-          onClick={handleGoogleSignUp}
+          onClick={onGoogleSignUp}
           isLoading={isGoogleLoading}
           disabled={isDisabled}
         />

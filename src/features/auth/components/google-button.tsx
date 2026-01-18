@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { GoogleIcon } from "./google-icon";
 import { Loader2 } from "lucide-react";
 

@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getEvents } from "../actions/events.actions";
-import { useToast } from "@/shared/hooks";
+import { useToast } from "@/components/ui/use-toast";
 import type { Event, SportType } from "@/types";
 
 interface UseEventsFilterOptions {
