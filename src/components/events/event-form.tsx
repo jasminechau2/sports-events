@@ -34,7 +34,17 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
 import { Calendar as CalendarIcon, X, Plus, Loader2 } from "lucide-react";
-import { SPORT_TYPES, type Event, type SportType } from "@/types";
+import { SPORT_TYPES, EVENT_COLORS, type Event, type SportType, type EventColor } from "@/types";
+import { cn } from "@/lib/utils";
+
+const COLOR_STYLES: Record<EventColor, string> = {
+  red: "bg-red-500",
+  blue: "bg-blue-500",
+  green: "bg-green-500",
+  yellow: "bg-yellow-500",
+  purple: "bg-purple-500",
+  orange: "bg-orange-500",
+};
 
 const eventSchema = z.object({
   name: z.string().min(1, "Event name is required").max(255, "Event name is too long"),
@@ -50,6 +60,7 @@ const eventSchema = z.object({
     (venues) => venues.filter((v) => v.trim() !== "").length >= 1,
     { message: "At least one venue is required" }
   ),
+  color: z.enum(EVENT_COLORS).nullable().optional(),
 });
 
 type EventFormValues = z.infer<typeof eventSchema>;
@@ -72,6 +83,7 @@ export function EventForm({ event }: EventFormProps) {
       time: event?.date_time ? format(new Date(event.date_time), "HH:mm") : "",
       description: event?.description || "",
       venues: event?.venues?.length ? event.venues : [""],
+      color: event?.color || null,
     },
   });
 
@@ -113,6 +125,7 @@ export function EventForm({ event }: EventFormProps) {
       date_time: dateTime.toISOString(),
       description: data.description,
       venues: data.venues.filter((v) => v.trim() !== ""),
+      color: data.color,
     };
 
     if (event) {
@@ -201,6 +214,41 @@ export function EventForm({ event }: EventFormProps) {
                 </SelectContent>
               </Select>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="color"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Color Marker</FormLabel>
+              <FormControl>
+                <div className="flex flex-wrap gap-2">
+                  {EVENT_COLORS.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      disabled={isSubmitting}
+                      onClick={() => field.onChange(field.value === color ? null : color)}
+                      className={cn(
+                        "size-8 rounded-full transition-all",
+                        COLOR_STYLES[color],
+                        field.value === color
+                          ? "ring-2 ring-offset-2 ring-gray-900 dark:ring-gray-100"
+                          : "hover:scale-110",
+                        isSubmitting && "opacity-50 cursor-not-allowed"
+                      )}
+                    >
+                      <span className="sr-only">{color}</span>
+                    </button>
+                  ))}
+                </div>
+              </FormControl>
+              <FormDescription>
+                Optional color to help group events
+              </FormDescription>
             </FormItem>
           )}
         />

@@ -8,7 +8,7 @@ import {
   type ServerActionResultVoid,
 } from "@/lib/actions";
 import * as eventsService from "../services/events.service";
-import type { Event, EventFormData } from "@/types";
+import type { Event, CreateEventDTO, UpdateEventDTO } from "@/types";
 
 export async function getEvents(params?: {
   search?: string;
@@ -35,7 +35,7 @@ export async function getEvent(id: string): Promise<ServerActionResult<Event>> {
 }
 
 export async function createEvent(
-  formData: EventFormData
+  formData: CreateEventDTO
 ): Promise<ServerActionResult<Event>> {
   return executeServerAction(async () => {
     const event = await eventsService.createEvent(formData);
@@ -46,7 +46,7 @@ export async function createEvent(
 
 export async function updateEvent(
   id: string,
-  formData: EventFormData
+  formData: UpdateEventDTO
 ): Promise<ServerActionResult<Event>> {
   return executeServerAction(async () => {
     const event = await eventsService.updateEvent(id, formData);

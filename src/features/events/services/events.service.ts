@@ -92,6 +92,7 @@ export async function createEvent(dto: CreateEventDTO): Promise<Event> {
       date_time: dto.date_time,
       description: dto.description || null,
       venues: dto.venues,
+      color: dto.color || null,
       user_id: user.id,
     })
     .select()
@@ -121,6 +122,7 @@ export async function updateEvent(
   if (dto.description !== undefined)
     updateData.description = dto.description || null;
   if (dto.venues !== undefined) updateData.venues = dto.venues;
+  if (dto.color !== undefined) updateData.color = dto.color || null;
 
   const { data, error } = await supabase
     .from("events")

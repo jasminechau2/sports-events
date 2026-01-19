@@ -32,7 +32,17 @@ import {
   Trash2,
   Loader2,
 } from "lucide-react";
-import type { Event } from "@/types";
+import type { Event, EventColor } from "@/types";
+import { cn } from "@/lib/utils";
+
+const COLOR_STYLES: Record<EventColor, string> = {
+  red: "bg-red-500",
+  blue: "bg-blue-500",
+  green: "bg-green-500",
+  yellow: "bg-yellow-500",
+  purple: "bg-purple-500",
+  orange: "bg-orange-500",
+};
 
 interface EventCardProps {
   event: Event;
@@ -65,8 +75,14 @@ export function EventCard({ event }: EventCardProps) {
   };
 
   return (
-    <Card className="transition-shadow hover:shadow-md">
-      <CardHeader className="pb-3">
+    <Card className={cn(
+      "transition-shadow hover:shadow-md overflow-hidden",
+      event.color && "relative"
+    )}>
+      {event.color && (
+        <div className={cn("absolute left-0 top-0 h-full w-1", COLOR_STYLES[event.color])} />
+      )}
+      <CardHeader className={cn("pb-3", event.color && "pl-5")}>
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <CardTitle className="line-clamp-1 text-lg">
@@ -137,7 +153,7 @@ export function EventCard({ event }: EventCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className={cn("space-y-3", event.color && "pl-5")}>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="size-4 shrink-0" />
           <span>{format(new Date(event.date_time), "PPP 'at' p")}</span>

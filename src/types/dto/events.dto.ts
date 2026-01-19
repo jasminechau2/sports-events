@@ -1,19 +1,20 @@
 // Base DTO for event data
+import { EventColor } from "@/types/entities/event.entity";
+
+
 interface BaseEventDTO {
   name: string;
   sport_type: string;
   date_time: string;
   description?: string;
   venues: string[];
+  color?: EventColor | null;
 }
 
-// For creating events
 export interface CreateEventDTO extends BaseEventDTO {}
 
-// For updating events (all fields optional)
 export interface UpdateEventDTO extends Partial<BaseEventDTO> {}
 
-// For filtering/searching events
 export interface EventFiltersDTO {
   search?: string;
   sportType?: string;
@@ -23,7 +24,6 @@ export interface EventFiltersDTO {
   offset?: number;
 }
 
-// Paginated response
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;

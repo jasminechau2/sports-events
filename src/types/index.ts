@@ -1,5 +1,6 @@
 // Re-export entities
-export type { Event, User } from "./entities";
+export type { Event, User, EventColor } from "./entities";
+export { EVENT_COLORS } from "./entities";
 
 // Re-export DTOs
 export type {
@@ -12,22 +13,7 @@ export type {
   AuthResponseDTO,
 } from "./dto";
 
-// Legacy exports for backward compatibility (will be removed in future)
-// Using config-driven approach now via src/config/sports.config.ts
-export type SportType =
-  | "Soccer"
-  | "Basketball"
-  | "Tennis"
-  | "Baseball"
-  | "Football"
-  | "Hockey"
-  | "Golf"
-  | "Swimming"
-  | "Running"
-  | "Volleyball"
-  | "Other";
-
-export const SPORT_TYPES: SportType[] = [
+export const SPORT_TYPES = [
   "Soccer",
   "Basketball",
   "Tennis",
@@ -39,13 +25,6 @@ export const SPORT_TYPES: SportType[] = [
   "Running",
   "Volleyball",
   "Other",
-];
+] as const;
 
-// Legacy type - use CreateEventDTO/UpdateEventDTO instead
-export interface EventFormData {
-  name: string;
-  sport_type: SportType;
-  date_time: string;
-  description?: string;
-  venues: string[];
-}
+export type SportType = (typeof SPORT_TYPES)[number];

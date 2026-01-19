@@ -34,9 +34,6 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // IMPORTANT: Do not run any code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could cause hard-to-debug
-  // session issues.
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -59,6 +56,5 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // IMPORTANT: Return the supabaseResponse to ensure cookies are set
   return supabaseResponse;
 }

@@ -18,9 +18,8 @@ export async function createClient() {
             for (const { name, value, options } of cookiesToSet) {
               cookieStore.set(name, value, options);
             }
-          } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing sessions.
+          } catch {  
+            // Handle errors silently
           }
         },
       },
@@ -28,7 +27,6 @@ export async function createClient() {
   );
 }
 
-// Admin client for service role operations (bypasses RLS)
 export function createAdminClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
