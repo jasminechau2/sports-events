@@ -21,6 +21,7 @@ export function useGoogleAuth(options?: UseGoogleAuthOptions): UseGoogleAuthRetu
     setIsGoogleLoading(true);
 
     const result = await signInWithGoogle();
+    console.log("Google auth result:", result);
 
     if (!result.success) {
       toast({
