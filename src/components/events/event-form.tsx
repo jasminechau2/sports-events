@@ -226,27 +226,9 @@ export function EventForm({ event }: EventFormProps) {
                         className="pr-10"
                       />
                     </FormControl>
-                    <PopoverTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        disabled={isSubmitting}
-                        className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                      >
-                        <CalendarIcon className="size4 text-muted-foreground" />
-                        <span className="sr-only">Open calendar</span>
-                      </Button>
-                    </PopoverTrigger>
+               
                   </div>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
+              
                 </Popover>
                 <FormMessage />
               </FormItem>
